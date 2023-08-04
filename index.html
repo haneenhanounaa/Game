@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title >RPS</title>
+  <style>
+    body{background-color: rgb(25,25,25);
+    color: white;
+    font-family: Arial;
+    }
+
+    .img-move{
+       height: 50px;
+       padding: 20px;
+       background-color: black;
+       border:3px solid white ;
+       border-radius: 60px;
+       margin-right: 10px;
+       cursor: pointer;
+      }
+    .btn-move{
+      background-color: rgb(25,25,25);      border-style: none;
+    }
+
+    .js-result{
+      font-size:25px ;
+      font-weight:bold ;
+      margin-top: 50px;
+    }
+
+    .img-scor{
+       height: 50px;
+       padding: 20px;
+       background-color: black;
+       border-radius: 60px;
+       margin-right: 10px;
+    }
+
+    .js-score{
+      margin-top: 60px;
+    }
+
+    .btn-reset-scor{
+      background-color: white;
+      border: none;
+      font-size: 15px;
+      padding: 8px 15px;
+      cursor: pointer;
+    }
+    
+    
+  </style>
+</head>
+
+
+<body>
+
+  <h3 style="font-size: 30px;font-weight: bold;">Rock Paper Scissors</h3>
+
+  <button class="btn-move" onclick="
+      playGame('rock');
+      "><img class="img-move" src="imges/rock-emoji.png"></button>
+
+  <button class="btn-move" onclick="
+      playGame('paper');
+      "><img class="img-move" src="imges/paper-emoji.png"></button>
+
+
+  <button class="btn-move" onclick="
+        playGame('scissors'); 
+      "><img class="img-move"  src="imges/scissors-emoji.png"></button>
+
+
+  <p class="js-result"></p>
+
+  <p class="js-moves">
+    You
+     <img class="img-scor" src="imges/rock-emoji.png">
+     <img class="img-scor" src="imges/scissors-emoji.png">
+    Computer 
+  </p>
+
+  <p class="js-score"></p>
+
+
+
+
+  <button onclick="
+      scor.wins=0;
+      scor.loses=0;
+      scor.ties=0;
+      localStorage.removeItem('scor');
+      updateScoreElement();
+      "
+      class="btn-reset-scor">Reset Score</button>
+
+  <script>
+
+
+    let scor = {
+      //عرف القيم ب اوبجيكت لانهم مرتبطين ببعض
+      wins: 0, loses: 0, ties: 0
+    };
+
+   updateScoreElement();
+
+    console.log(JSON.parse(localStorage.getItem('scor')));  //هان
+
+    if (scor === null) {
+      scor = { wins: 0, loses: 0, ties: 0 }
+    }
+
+    function playGame(playerMove) {
+
+      const compMove = pickComputerMove();
+
+
+      let res = '';
+
+      if (playerMove === 'scissors') {
+
+        if (compMove === 'rock') {
+          res = 'You lose';
+        } else if (compMove === 'paper') {
+          res = 'You Win';
+        } else if (compMove === 'scissors') {
+          res = ' Tie';
+        }
+      }
+      else if (playerMove === 'rock') {
+        if (compMove === 'rock') {
+          res = 'Tie';
+        } else if (compMove === 'paper') {
+          res = 'You Lose';
+        } else if (compMove === 'scissors') {
+          res = 'You Win';
+        }
+
+      }
+      else if (playerMove === 'paper') {
+        if (compMove === 'rock') {
+          res = 'You Win';
+        } else if (compMove === 'paper') {
+          res = 'Tie';
+        } else if (compMove === 'scissors') {
+          res = 'You Lose';
+        }
+
+      }
+
+      if (res === 'You Win') {
+        scor.wins += 1;
+      }
+      else if (res === 'Tie') {
+        scor.ties += 1;
+      }
+      else if (res === 'You Lose') {
+        scor.loses += 1;
+      }
+
+      localStorage.setItem('scor', JSON.stringify(scor));// local Storageهيك خزنت ع ال
+
+      //بدي اجيب القيمة يلي خزنتها الحل في سطر
+
+      document.querySelector('.js-score')
+        .innerHTML =' Wins: ' + scor.wins +  '     Loses: ' + scor.loses + '  Ties: ' + scor.ties;
+
+
+      document.querySelector('.js-result').innerHTML=res;
+
+      document.querySelector('.js-moves').innerHTML= `You
+        <img src="imges/${playerMove}-emoji.png" class="img-scor">
+        <img src="imges/${compMove}-emoji.png" class="img-scor">
+        Computer`;
+
+      alert('you picked ' + playerMove + '. computer picked ' + compMove + '.' + res + 'Wins: ' + scor.wins + ' Loses: ' + scor.loses + ' Ties: ' + scor.ties);
+
+
+      //let compMove='';// لازم اعرفها برا علشان تقدر توصلل البيانات ل برا الفنكشين  
+
+
+    }
+
+    function updateScoreElement(){
+      document.querySelector('.js-score')
+        .innerHTML = ' Wins: '+scor.wins+' Loses: '+scor.loses+' Ties: '+scor.ties ;
+      
+    }
+
+    function pickComputerMove() {
+      const randomNumber = Math.random();
+
+
+      if (randomNumber >= 0 && randomNumber < 1 / 3) {
+        compMove = 'rock';
+
+      } else if (randomNumber >= 1 / 3 && randomNumber < 2 / 3) {
+        compMove = 'paper';
+
+      } else if (randomNumber >= 2 / 3 && randomNumber < 1) {
+        compMove = 'scissors';
+      }
+
+      return compMove;
+    }
+
+
+  </script>
+</body>
+
+</html>
